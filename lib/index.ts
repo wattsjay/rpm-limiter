@@ -56,6 +56,7 @@ export function* initTimeUntilNextMinute(rpm: number, minuteMs = 60_000) {
       count++
 
       if (count > rpm) {
+        console.log(`[RPM_LIMITER] Limit reached. Waiting ${remainder}ms`)
         return remainder
       }
 
