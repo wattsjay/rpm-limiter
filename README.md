@@ -29,6 +29,50 @@ async function proofReadMarkdownDocs() {
 }
 ```
 
+---
+
+## Develop
+
+### Clone
+
+```shell
+git clone https://github.com/wattsjay/rpm-limiter.git
+cd rpm-limiter
+npm i
+```
+
+### Dependencies
+
+```json
+// Vite
+"vite": "^6.0.1",
+"vitest": "^2.1.8"
+"vite-plugin-dts": "^4.3.0",
+// Eslint
+"eslint": "^9.16.0",
+"eslint-config-prettier": "^9.1.0",
+"eslint-plugin-prettier": "^5.2.1",
+// Prettier
+"prettier": "^3.4.2",
+// TypeScript
+"typescript": "~5.6.2",
+"typescript-eslint": "^8.17.0",
+```
+
+### Test
+
+```shell
+npm run test
+```
+
+### Build
+
+```shell
+npm run build
+```
+
+---
+
 ## Contributions
 
 Pull Requests are welcomed directly to the `main` branch.
