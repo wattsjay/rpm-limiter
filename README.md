@@ -43,21 +43,15 @@ npm i
 
 ### Dependencies
 
-```json
-// Vite
-"vite": "^6.0.1",
-"vitest": "^2.1.8"
-"vite-plugin-dts": "^4.3.0",
-// Eslint
-"eslint": "^9.16.0",
-"eslint-config-prettier": "^9.1.0",
-"eslint-plugin-prettier": "^5.2.1",
-// Prettier
-"prettier": "^3.4.2",
-// TypeScript
-"typescript": "~5.6.2",
-"typescript-eslint": "^8.17.0",
-```
+- **`Vite`** (6.0.1)
+  - `vitest` (2.1.8)
+  - `vite-plugin-dts` (4.3.0)
+- **`ESlint`** (9.16.0)
+  - `eslint-config-prettier` (9.1.0)
+  - `eslint-plugin-prettier` (5.2.1)
+- **`Prettier`** (3.4.2)
+- **`TypeScript`** (5.6.2)
+  - `typescript-eslint` (8.17.0)
 
 ### Test
 
