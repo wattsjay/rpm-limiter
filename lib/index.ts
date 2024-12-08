@@ -1,27 +1,3 @@
-/*
-  MIT License
-
-  Copyright (c) 2024 Jay Watts
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
 /**
  * A generator function that returns the miliseconds to wait
  * before making the next call to comply with the supplied RPM.
@@ -91,18 +67,6 @@ export function initWaitFor() {
 }
 
 /**
- * Round milliseconds to the nearest multiple of milliseconds.
- *
- * @example
- * ```ts
- * console.log(roundMiliseconds(666.666, 5)) // 665
- * ```
- */
-export function roundMiliseconds(ms: number, nearestMs: number) {
-  return Math.round(ms / nearestMs) * nearestMs
-}
-
-/**
  * Initialize a rate per minute limiter.
  *
  * @param rpm - The rate per minute.
@@ -111,39 +75,32 @@ export function roundMiliseconds(ms: number, nearestMs: number) {
  *
  * @example
  * ```ts
- * const { rateLimiter, clear } = initRatePerMinuteLimiter(3)
+ * const { rateLimiter } = initRatePerMinuteLimiter(3)
  *
- * await rateLimiter()
- * await rateLimiter()
- * await rateLimiter()
- * console.log('This is logged immediately')
+ * async function generateBlogPosts() {
+ *   const prompts = read.prompts()
  *
- * await rateLimiter()
- * console.log('This is logged after 1 minute')
+ *   for (const prompt of prompts) {
+ *     await rateLimiter() // <- 4th call has to wait 1 minute
+ *     const blogPost = await writeBlogPostWithGemini(prompt)
  *
- * clear() // Clear the timeout.
+ *     write.blogPost(blogPost)
+ *   }
+ * }
  * ```
  */
 export function initRatePerMinuteLimiter(rpm: number, minuteMs = 60_000) {
-  const { waitFor, clearWaitFor } = initWaitFor()
-
-  const createRateLimiter = () => {
-    const timeoutGenerator = initTimeUntilNextMinute(rpm, minuteMs)
-    return async () => {
-      const timeout = timeoutGenerator.next().value as number
-      await waitFor(timeout)
-    }
-  }
+  const { waitFor, clearWaitFor: clear } = initWaitFor()
+  const timeoutGenerator = initTimeUntilNextMinute(rpm, minuteMs)
 
   return {
-    get rateLimiter() {
-      return createRateLimiter()
+    rateLimiter: async () => {
+      const timeout = timeoutGenerator.next().value as number
+      await waitFor(timeout)
     },
     /**
      * Clear the timeout.
      */
-    clear: () => {
-      clearWaitFor()
-    }
+    clear
   }
 }

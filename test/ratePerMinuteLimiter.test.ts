@@ -2,8 +2,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import {
   initTimeUntilNextMinute,
   initWaitFor,
-  initRatePerMinuteLimiter,
-  roundMiliseconds
+  initRatePerMinuteLimiter
 } from '../lib'
 
 const MS_PER_MINUTE = 250
@@ -72,3 +71,15 @@ describe('initRatePerMinuteLimiter', () => {
     )
   })
 })
+
+/**
+ * Round milliseconds to the nearest multiple of milliseconds.
+ *
+ * @example
+ * ```ts
+ * console.log(roundMiliseconds(666.666, 5)) // 665
+ * ```
+ */
+export function roundMiliseconds(ms: number, nearestMs: number) {
+  return Math.round(ms / nearestMs) * nearestMs
+}

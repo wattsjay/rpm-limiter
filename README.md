@@ -15,16 +15,14 @@ import { initRatePerMinuteLimiter } from 'rpm-limiter'
 
 const { rateLimiter } = initRatePerMinuteLimiter(3)
 
-async function proofReadMarkdownDocs() {
-  const mdDocs = read.md()
+async function generateBlogPosts() {
+  const prompts = read.prompts()
 
-  for (const mdDoc of mdDocs) {
-    // The first three mdDocs will wait for 0 seconds.
-    // The fourth mdDoc, however, will have to wait for the time
-    // remaining in the first 1-minute interval.
-    await rateLimiter()
-    const proofedDoc = await proofDocWithGeminiApi(mdDoc)
-    write.md(proofedDoc)
+  for (const prompt of prompts) {
+    await rateLimiter() // <- 4th call has to wait 1 minute
+    const blogPost = await writeBlogPostWithGemini(prompt)
+
+    write.blogPost(blogPost)
   }
 }
 ```
